@@ -1,0 +1,61 @@
+
+import Image from "next/image";
+import Link from "next/link";
+import CategoryMenu from "./CategoryMenu";
+
+const Navbar = async () => {
+
+    const categoryRes = await fetch(`https://api.api-store.workers.dev/api/bazardor/categories`);
+    const categoryData = await categoryRes.json();
+
+    const date = new Date().toLocaleDateString('bn-BD',
+        { dateStyle: 'full' });
+
+    return (
+        <div className="bg-(--bg-blue-100)">
+            {/* Header-top: logo+buttons */}
+            <div className="container mx-auto">
+                <div className="flex gap-5 justify-between px-5 py-4">
+                    {/* Logo  */}
+                    <Link href='/'>
+                        <div className="flex gap-2">
+                            <div className="p-4 bg-[#05893E] text-white rounded-lg flex items-center">
+                                <Image
+
+                                    src='/logo-icon.png'
+                                    width={18}
+                                    height={18}
+                                    alt="Logo"
+                                />
+                            </div>
+                            <div className="flex flex-col gap-0">
+                                <h2 className="text-2xl text-(--base-content) font-bold">বাজার দর</h2>
+                                <span className="text-gray-500">{date}</span>
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* Buttons  */}
+                    <div className="flex flex-row gap-2">
+                        <button className="btn btn-ghost text-lg">সাইন ইন</button>
+                        <button className="btn btn-success bg-(--primary) text-white text-lg">সাইন আপ</button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Header nav menu  */}
+            <div className="border-y border-(--bg-blue-300) shadow">
+                <div className="container mx-auto flex flex-row flex-nowrap overflow-x-auto gap-0 px-5 py-2">
+                    {
+                        categoryData.map((category: ICategoryType) => <CategoryMenu
+                            key={category.id}
+                            category={category}
+                        />)
+                    }
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Navbar;
