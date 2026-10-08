@@ -15,7 +15,9 @@ const MarqueeHeading = ({ product }: IProductProp) => {
             .replace(/\d/g, (digit) => banglaDigits[digit]);
     };
 
-    if (product.change.dir)
+    if (product.change.dir==="flat"){
+        return;
+    }
 
         return (
             <div className="flex flex-row items-center gap-1 text-lg">
