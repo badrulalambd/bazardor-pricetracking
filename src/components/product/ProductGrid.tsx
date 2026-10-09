@@ -7,7 +7,7 @@ const ProductGrid = async () => {
     // const productRes = await fetch("https://api.api-store.workers.dev/api/bazardor/products");
     const productRes = await fetch("https://api.abcz.workers.dev/api/bazardor/products", {
         next: {
-            revalidate: 3600,
+            revalidate: 120,
         },
     });
     const productData = await productRes.json();
