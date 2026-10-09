@@ -2,6 +2,7 @@
 
 import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 import { FaGithub } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
@@ -54,6 +55,76 @@ const SignInPage = () => {
 
     }
 
+    const handleGoogleLogin = async () => {
+        const { data, error } = await authClient.signIn.social({
+            provider: "google",
+        });
+
+        if (data) {
+            console.log("Login successfull!", data);
+            toast.success('Login successfull!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+            redirect("/");
+        } else {
+            console.log("Login failed", error);
+            toast.error('Login failed', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
+
+    const handleGithubLogin = async () => {
+        const {data, error} = await authClient.signIn.social({
+            provider: "github"
+        });
+
+        if (data) {
+            console.log("Login successfull!", data);
+            toast.success('Login successfull!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+            redirect("/");
+        } else {
+            console.log("Login failed", error);
+            toast.error('Login failed', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    }
+
     return (
         <div className="container mx-auto flex justify-center px-5 py-10">
 
@@ -91,8 +162,8 @@ const SignInPage = () => {
                     <div className="divider">অথবা</div>
 
                     <div className="flex justify-center gap-2.5">
-                        <button className="btn btn-outline"><FcGoogle />Google দিয়ে চালিয়ে যান</button>
-                        <button className="btn btn-outline"><FaGithub />GitHub দিয়ে চালিয়ে যান</button>
+                        <button onClick={handleGoogleLogin} className="btn btn-outline"><FcGoogle />Google দিয়ে চালিয়ে যান</button>
+                        <button onClick={handleGithubLogin} className="btn btn-outline"><FaGithub />GitHub দিয়ে চালিয়ে যান</button>
                     </div>
 
                     <div className="flex justify-center mt-5">
