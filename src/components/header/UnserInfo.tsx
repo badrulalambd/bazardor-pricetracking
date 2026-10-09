@@ -18,7 +18,7 @@ const UnserInfo = () => {
                 onSuccess: () => {
                     router.replace("/");
                     router.refresh();
-                    toast.success('Successfully logged out!', {
+                    toast.success('Logout successful!', {
                         position: "bottom-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -31,7 +31,7 @@ const UnserInfo = () => {
                     });
                 },
                 onError: (ctx) => {
-                    console.error("Failed to log out", ctx.error);
+                    console.error("Logout failed", ctx.error);
                     toast.success('Logged out success!', {
                         position: "bottom-right",
                         autoClose: 5000,
@@ -73,7 +73,9 @@ const UnserInfo = () => {
                                 <h3 className='font-semibold text-gray-400'>{user.name}</h3>
                                 <span className='text-[12px] font-light text-gray-400'>{user.email}</span>
                             </div>
-                            <button className="btn btn-ghost justify-start px-1 py-0.5">👤 আমার প্রোফাইল</button>
+                            <Link href="/profile">
+                                <button className="btn btn-ghost justify-start px-1 py-0.5">👤 আমার প্রোফাইল</button>
+                            </Link>
                             <button onClick={handleSignout} className="btn btn-ghost justify-start text-red-600 px-1 py-0.5">↩ সাইন আউট</button>
                         </div>
                     </div>

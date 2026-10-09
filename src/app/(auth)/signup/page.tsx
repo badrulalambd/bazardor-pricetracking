@@ -16,19 +16,19 @@ const SignUpPage = () => {
     const handleOnSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const user = Object.fromEntries(formData.entries()) as {name: string, email: string, password: string, cpassword: string};
+        const user = Object.fromEntries(formData.entries()) as { name: string, email: string, password: string, cpassword: string };
 
         const { data, error } = await authClient.signUp.email({
 
-             name: user.name as string, 
-            email: user.email as string, 
-            password: user.password as string, 
+            name: user.name as string,
+            email: user.email as string,
+            password: user.password as string,
         });
 
-        if(data){
+        if (data) {
             setUserExist(false);
             console.log("Signup successfull!", data);
-            toast.success('Successfully logged in!', {
+            toast.success('Signup successfull!', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -40,10 +40,10 @@ const SignUpPage = () => {
                 transition: Bounce,
             });
             redirect("/");
-        }else{
+        } else {
             setUserExist(true);
-            console.log("Faild to signup", error);
-            toast.success('User already exists', {
+            console.log("Signup failed", error);
+            toast.error('User already exists', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -53,9 +53,49 @@ const SignUpPage = () => {
                 progress: undefined,
                 theme: "dark",
                 transition: Bounce,
-            });  
+            });
         }
 
+    }
+
+    const handleGoogleLogin = async () => {
+        const { data, error } = await authClient.signIn.social({
+            provider: "google",
+        });
+        if (data) {
+            console.log("Login successfull!", data);
+            toast.success('Login successfull!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+            redirect("/");
+        } else {
+            console.log("Login failed", error);
+            toast.error('Login failed', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
+
+    const handleGithubLogin = async () => {
+        const data = await authClient.signIn.social({
+            provider: "github"
+        })
     }
 
     return (
@@ -70,9 +110,9 @@ const SignUpPage = () => {
                 <div className="p-5 md:p-8 bg-white rounded-2xl flex flex-col">
                     <div>
                         {
-                            userExist&&
+                            userExist &&
                             <div className="w-md mb-3 flex gap-4 text-lg bg-red-700 text-gray-100 items-center rounded-2xl p-5">
-                                <IoIosWarning className="text-yellow-400 text-2xl"/>
+                                <IoIosWarning className="text-yellow-400 text-2xl" />
                                 <span>এই ইমেইল দিয়ে আগে থেকেই একটি অ্যাকাউন্ট আছে। সাইন ইন করে নিন।</span>
                             </div>
                         }
@@ -103,8 +143,8 @@ const SignUpPage = () => {
                     <div className="divider">অথবা</div>
 
                     <div className="flex justify-center gap-2.5">
-                        <button className="btn btn-outline"><FcGoogle />Google দিয়ে চালিয়ে যান</button>
-                        <button className="btn btn-outline"><FaGithub />GitHub দিয়ে চালিয়ে যান</button>
+                        <button onClick={handleGoogleLogin} className="btn btn-outline"><FcGoogle />Google দিয়ে চালিয়ে যান</button>
+                        <button onClick={handleGithubLogin} className="btn btn-outline"><FaGithub />GitHub দিয়ে চালিয়ে যান</button>
                     </div>
 
                     <div className="flex justify-center mt-5">
