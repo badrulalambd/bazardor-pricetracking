@@ -24,7 +24,7 @@ const ProductCard = ({ product }: IProductProp) => {
                         <span className="bg-(--bg-blue-200) rounded-xl p-4">{product.categoryIcon}</span>
                     </div>
                     <div className="flex flex-col">
-                        <h4 className="text-lg md:text-xl font-bold">{product.nameBn}</h4>
+                        <h4 className="text-xl md:text-2xl font-bold">{product.nameBn}</h4>
                         <span className="text-gray-500">প্রতি কেজি</span>
                     </div>
                 </div>
@@ -32,7 +32,7 @@ const ProductCard = ({ product }: IProductProp) => {
                 <div className="grid grid-cols-2 justify-between gap-5">
                     <div className="flex flex-col">
                         <span className="text-gray-500">আজকের দাম</span>
-                        <h4 className="text-lg md:text-xl font-bold">৯২ <span className="text-lg font-normal">টাকা</span></h4>
+                        <h4 className="text-xl md:text-2xl font-bold">{englishToBanglaNumber(product.today)} <span className="text-lg font-normal">টাকা</span></h4>
                     </div>
                     <div className="flex justify-end items-end">
                         <span className="bg-(--bg-blue-200) px-2 py-1 rounded-4xl">{product.change.dir === "up" ?

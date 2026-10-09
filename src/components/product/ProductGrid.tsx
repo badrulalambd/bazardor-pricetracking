@@ -3,7 +3,12 @@ import ProductCard from "./ProductCard";
 
 const ProductGrid = async () => {
 
-    const productRes = await fetch(`https://api.api-store.workers.dev/api/bazardor/products`);
+    // const productRes = await fetch("https://api.api-store.workers.dev/api/bazardor/products");
+    const productRes = await fetch("https://api.abcz.workers.dev/api/bazardor/products", {
+        next: {
+            revalidate: 3600,
+        },
+    });
     const productData = await productRes.json();
 
     const highPriceProduct = productData.filter((product: IProductDetailType) => product.today > product.yesterday)

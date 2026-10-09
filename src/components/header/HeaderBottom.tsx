@@ -6,7 +6,12 @@ import "react-marquee-text/dist/styles.css"
 
 const HeaderBottom = async () => {
 
-    const productRes = await fetch(`https://api.api-store.workers.dev/api/bazardor/products`);
+    // const productRes = await fetch("https://api.api-store.workers.dev/api/bazardor/products");
+    const productRes = await fetch("https://api.abcz.workers.dev/api/bazardor/products", {
+        next: {
+            revalidate: 3600,
+        },
+    });
     const ProductData = await productRes.json();
 
     return (

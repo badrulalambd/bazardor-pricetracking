@@ -1,10 +1,15 @@
+"use client";
+
 import Image from 'next/image';
-import React from 'react';
 
 const Banner = () => {
 
-    const date = new Date().toLocaleDateString('bn-BD',
-        { dateStyle: 'full' });
+    // const date = new Date().toLocaleDateString('bn-BD',
+    //     { dateStyle: 'full' });
+
+    const date = Intl.DateTimeFormat("bn-BD", {
+        dateStyle: "full",
+    }).format();
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-10 gap-8 lg:gap-12 bg-white p-6 md:p-10 lg:p-12 rounded-2xl shadow-sm border border-gray-100">
@@ -48,7 +53,7 @@ const Banner = () => {
                         width={360}
                         height={300}
                         alt="বাজারের পণ্যের ছবি"
-                        className="relative w-[300px] md:w-[330px] lg:w-[360px] object-contain"
+                        className="h-auto w-full"
                     />
 
                 </div>

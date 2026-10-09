@@ -2,14 +2,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import CategoryMenu from "./CategoryMenu";
+import UnserInfo from "./UnserInfo";
 
 const Navbar = async () => {
 
-    const categoryRes = await fetch(`https://api.api-store.workers.dev/api/bazardor/categories`);
+    // const categoryRes = await fetch("https://api.api-store.workers.dev/api/bazardor/categories");
+    const categoryRes = await fetch("https://api.abcz.workers.dev/api/bazardor/categories",{next: {
+                revalidate: 3600,
+            },});
     const categoryData = await categoryRes.json();
 
-    const date = new Date().toLocaleDateString('bn-BD',
-        { dateStyle: 'full' });
+    // const date = new Date().toLocaleDateString('bn-BD',
+    //     { dateStyle: 'full' });
+    const date = Intl.DateTimeFormat("bn-BD", {
+        dateStyle: "full",
+    }).format();
 
     return (
         <div className="bg-(--bg-blue-100)">
@@ -36,10 +43,7 @@ const Navbar = async () => {
                     </Link>
 
                     {/* Buttons  */}
-                    <div className="flex flex-row gap-2">
-                        <button className="btn btn-ghost text-lg">সাইন ইন</button>
-                        <button className="btn btn-success bg-(--primary) text-white text-lg">সাইন আপ</button>
-                    </div>
+                    <UnserInfo />
                 </div>
             </div>
 
