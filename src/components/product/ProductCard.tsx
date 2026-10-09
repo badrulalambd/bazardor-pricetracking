@@ -8,12 +8,12 @@ interface IProductProp {
 
 const ProductCard = ({ product }: IProductProp) => {
 
-    const englishToBanglaNumber = (number: number) => {
-        const banglaDigits = "০১২৩৪৫৬৭৮৯";
+    const englishToBanglaNumber = (number: number): string => {
+        const banglaDigits: string = "০১২৩৪৫৬৭৮৯";
 
         return number
             .toString()
-            .replace(/\d/g, (digit) => banglaDigits[digit]);
+            .replace(/\d/g, (digit: string): string => banglaDigits[Number(digit)]);
     };
 
     return (

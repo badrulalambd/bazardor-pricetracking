@@ -1,0 +1,10 @@
+
+const LoadingPage = () => {
+    return (
+        <div className="flex min-h-screen items-center justify-center">
+            <p className='text-lg font-bold'>Loading...</p>
+        </div>
+    );
+};
+
+export default LoadingPage;

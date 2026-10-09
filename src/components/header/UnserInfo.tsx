@@ -16,30 +16,20 @@ const UnserInfo = () => {
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {
-                    router.replace("/");
-                    router.refresh();
-                    toast.success('Logout successful!', {
+                    toast.success("Logout successful!", {
                         position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: false,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
                         theme: "dark",
                         transition: Bounce,
                     });
+
+                    router.replace("/");
+                    router.refresh();
                 },
                 onError: (ctx) => {
-                    console.error("Logout failed", ctx.error);
-                    toast.success('Logged out success!', {
+                    console.error("Logout failed:", ctx.error);
+
+                    toast.error("লগআউট করা যায়নি!", {
                         position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: false,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
                         theme: "dark",
                         transition: Bounce,
                     });

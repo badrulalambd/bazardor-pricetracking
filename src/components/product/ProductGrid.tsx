@@ -1,5 +1,6 @@
 import { IoCaretDownSharp, IoCaretUpSharp } from "react-icons/io5";
 import ProductCard from "./ProductCard";
+import { notFound } from "next/navigation";
 
 const ProductGrid = async () => {
 
@@ -10,6 +11,10 @@ const ProductGrid = async () => {
         },
     });
     const productData = await productRes.json();
+     // If Product data is not found then it will redirect to the notFound page
+    if (!productData) {
+        notFound();
+    }
 
     const highPriceProduct = productData.filter((product: IProductDetailType) => product.today > product.yesterday)
     const sortedHighPriceProduct = highPriceProduct.sort((a: IProductDetailType, b: IProductDetailType) => b.change.pct - a.change.pct)
@@ -17,12 +22,12 @@ const ProductGrid = async () => {
     const lowPriceProduct = productData.filter((product: IProductDetailType) => product.today < product.yesterday)
     const sortedLowPriceProduct = lowPriceProduct.sort((a: IProductDetailType, b: IProductDetailType) => a.change.pct - b.change.pct)
 
-    const englishToBanglaNumber = (number: number) => {
-        const banglaDigits = "০১২৩৪৫৬৭৮৯";
+    const englishToBanglaNumber = (number: number): string => {
+        const banglaDigits: string = "০১২৩৪৫৬৭৮৯";
 
         return number
             .toString()
-            .replace(/\d/g, (digit) => banglaDigits[digit]);
+            .replace(/\d/g, (digit: string): string => banglaDigits[Number(digit)]);
     };
 
     return (

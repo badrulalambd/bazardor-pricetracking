@@ -3,6 +3,7 @@ import MarqueeHeading from './MarqueeHeading';
 
 import MarqueeText from "react-marquee-text"
 import "react-marquee-text/dist/styles.css"
+import { notFound } from 'next/navigation';
 
 const HeaderBottom = async () => {
 
@@ -13,6 +14,10 @@ const HeaderBottom = async () => {
         },
     });
     const ProductData = await productRes.json();
+    // If Product data is not found then it will redirect to the notFound page
+    if (!ProductData) {
+        notFound();
+    }
 
     return (
         <div className="bg-(--bg-blue-100)">

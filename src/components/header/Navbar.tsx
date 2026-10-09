@@ -3,14 +3,22 @@ import Image from "next/image";
 import Link from "next/link";
 import CategoryMenu from "./CategoryMenu";
 import UnserInfo from "./UnserInfo";
+import { notFound } from "next/navigation";
 
 const Navbar = async () => {
 
     // const categoryRes = await fetch("https://api.api-store.workers.dev/api/bazardor/categories");
-    const categoryRes = await fetch("https://api.abcz.workers.dev/api/bazardor/categories",{next: {
-                revalidate: 3600,
-            },});
+    const categoryRes = await fetch("https://api.abcz.workers.dev/api/bazardor/categories", {
+        next: {
+            revalidate: 3600,
+        },
+    });
     const categoryData = await categoryRes.json();
+
+    // If category data is not found then it will redirect to the notFound page
+    if(!categoryData){
+        notFound();
+    }
 
     // const date = new Date().toLocaleDateString('bn-BD',
     //     { dateStyle: 'full' });
