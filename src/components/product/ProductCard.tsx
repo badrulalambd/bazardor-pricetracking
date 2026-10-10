@@ -6,6 +6,44 @@ interface IProductProp {
     product: IProductDetailType;
 }
 
+// Convert English units to Bengali
+const unitTranslations: Record<string, string> = {
+    kg: "কেজি",
+    kilogram: "কেজি",
+    kilograms: "কেজি",
+    g: "গ্রাম",
+    gram: "গ্রাম",
+    grams: "গ্রাম",
+    liter: "লিটার",
+    liters: "লিটার",
+    litre: "লিটার",
+    litres: "লিটার",
+    ml: "মিলিলিটার",
+    milliliter: "মিলিলিটার",
+    piece: "পিস",
+    pieces: "পিস",
+    pc: "পিস",
+    pcs: "পিস",
+    unit: "টি",
+    units: "টি",
+    dozen: "ডজন",
+    packet: "প্যাকেট",
+    packets: "প্যাকেট",
+    pack: "প্যাকেট",
+    bottle: "বোতল",
+    bottles: "বোতল",
+    bag: "বস্তা",
+    bags: "বস্তা",
+    box: "বক্স",
+    boxes: "বক্স",
+    bundle: "আঁটি",
+    bundles: "আঁটি",
+    pair: "জোড়া",
+    pairs: "জোড়া",
+    ton: "টন",
+    maund: "মণ",
+};
+
 const ProductCard = ({ product }: IProductProp) => {
 
     const englishToBanglaNumber = (number: number): string => {
@@ -16,6 +54,10 @@ const ProductCard = ({ product }: IProductProp) => {
             .replace(/\d/g, (digit: string): string => banglaDigits[Number(digit)]);
     };
 
+    // Get the Bengali equivalent of the API unit
+    const normalizedUnit = product.unit.trim().toLowerCase();
+    const banglaUnit = unitTranslations[normalizedUnit] ?? product.unit;
+
     return (
         <Link href={`/products/${product.id}`}>
             <div className="flex flex-col gap-4 bg-white p-5 rounded-2xl border border-gray-100 hover:border-(--primary) shadow">
@@ -25,7 +67,7 @@ const ProductCard = ({ product }: IProductProp) => {
                     </div>
                     <div className="flex flex-col">
                         <h4 className="text-xl md:text-2xl font-bold">{product.nameBn}</h4>
-                        <span className="text-gray-500">প্রতি কেজি</span>
+                        <span className="text-gray-500">প্রতি {banglaUnit}</span>
                     </div>
                 </div>
 

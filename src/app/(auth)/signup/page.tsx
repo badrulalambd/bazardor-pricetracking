@@ -19,7 +19,6 @@ const SignUpPage = () => {
         const user = Object.fromEntries(formData.entries()) as { name: string, email: string, password: string, cpassword: string };
 
         const { data, error } = await authClient.signUp.email({
-
             name: user.name as string,
             email: user.email as string,
             password: user.password as string,
@@ -39,7 +38,7 @@ const SignUpPage = () => {
                 theme: "colored",
                 transition: Bounce,
             });
-            redirect("/");
+            redirect("/signin");
         } else {
             setUserExist(true);
             console.log("Signup failed", error);
@@ -93,9 +92,37 @@ const SignUpPage = () => {
     };
 
     const handleGithubLogin = async () => {
-        const data = await authClient.signIn.social({
+        const { data, error } = await authClient.signIn.social({
             provider: "github"
-        })
+        });
+        if (data) {
+            console.log("Login successfull!", data);
+            toast.success('Login successfull!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+            redirect("/");
+        } else {
+            console.log("Login failed", error);
+            toast.error('Login failed', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
     }
 
     return (
