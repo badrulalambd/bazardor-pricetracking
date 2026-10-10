@@ -6,12 +6,18 @@ import UnserInfo from "./UnserInfo";
 import { notFound } from "next/navigation";
 const Navbar = async () => {
 
-    // const categoryRes = await fetch("https://api.api-store.workers.dev/api/bazardor/categories");
+    // const categoryRes = await fetch("https://api.api-store.workers.dev/api/bazardor/categories", {
+    //     next: {
+    //         revalidate: 120,
+    //     },
+    // });
     const categoryRes = await fetch("https://api.abcz.workers.dev/api/bazardor/categories", {
         next: {
             revalidate: 120,
         },
     });
+
+
     const categoryData = await categoryRes.json();
 
     // If category data is not found then it will redirect to the notFound page

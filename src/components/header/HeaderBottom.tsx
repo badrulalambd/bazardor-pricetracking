@@ -7,12 +7,18 @@ import { notFound } from 'next/navigation';
 
 const HeaderBottom = async () => {
 
-    // const productRes = await fetch("https://api.api-store.workers.dev/api/bazardor/products");
+    // const productRes = await fetch("https://api.api-store.workers.dev/api/bazardor/products", {
+    //     next: {
+    //         revalidate: 120,
+    //     },
+    // });
     const productRes = await fetch("https://api.abcz.workers.dev/api/bazardor/products", {
         next: {
             revalidate: 120,
         },
     });
+
+
     const ProductData = await productRes.json();
     // If Product data is not found then it will redirect to the notFound page
     if (!ProductData) {
