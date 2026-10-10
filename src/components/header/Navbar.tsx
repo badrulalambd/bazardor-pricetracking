@@ -32,7 +32,7 @@ const Navbar = async () => {
     return (
         <div className="bg-(--bg-blue-100)">
             {/* Header-top: logo+buttons */}
-            <div className="container mx-auto">
+            <div className="max-w-7xl mx-auto">
                 <div className="flex gap-5 justify-between px-5 py-4">
                     {/* Logo  */}
                     <Link href='/'>
@@ -60,7 +60,7 @@ const Navbar = async () => {
 
             {/* Header nav menu  */}
             <div className="border-y border-(--bg-blue-300) shadow">
-                <div className="container mx-auto flex flex-row flex-nowrap overflow-x-auto gap-0 px-5 py-2">
+                <div className="max-w-7xl mx-auto flex flex-row flex-nowrap overflow-x-auto gap-0 px-5 py-2">
                     {
                         categoryData.map((category: ICategoryType) => <CategoryMenu
                             key={category.id}

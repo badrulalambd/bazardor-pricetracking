@@ -71,7 +71,7 @@ export default function ProductCategoryGrid({
 
                 <div className="flex items-center gap-2">
                     <label
-                        className="text-sm text-base-content/70"
+                        className="text-lg text-base-content/70"
                         htmlFor="sort-products"
                     >
                         সাজান
@@ -80,7 +80,7 @@ export default function ProductCategoryGrid({
                     <div className="relative">
                         <select
                             id="sort-products"
-                            className="select select-bordered select-sm appearance-none pr-8"
+                            className="text-sm select select-bordered select-sm appearance-none pr-8"
                             value={sortBy}
                             onChange={(e) =>
                                 setSortBy(e.target.value as SortOption)

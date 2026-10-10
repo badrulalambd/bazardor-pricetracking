@@ -93,7 +93,7 @@ async function ProductCategoryContent({
     };
 
     return (
-        <div className="container mx-auto px-5 py-10">
+        <div className="max-w-7xl mx-auto px-5 py-10">
             <div className="flex flex-col gap-10">
                 {/* Category heading */}
                 <div className="bg-white p-5 rounded-2xl">

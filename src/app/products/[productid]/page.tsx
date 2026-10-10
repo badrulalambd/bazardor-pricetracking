@@ -52,7 +52,7 @@ export default function ProductDetailPage({
     params,
 }: ProductDetailProp) {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="container mx-auto px-5 py-10">Loading...</div>}>
             <ProductDetailContent params={params} />
         </Suspense>
     );
@@ -62,8 +62,8 @@ export default function ProductDetailPage({
 async function ProductDetailContent({ params }: ProductDetailProp) {
     const { productid } = await params;
 
-    const singleProductRes = await fetch(
-        `https://api.abcz.workers.dev/api/bazardor/products/${encodeURIComponent(productid)}`,
+    const productsRes = await fetch(
+        `https://api.abcz.workers.dev/api/bazardor/products`,
         {
             next: {
                 revalidate: 120,
@@ -71,37 +71,66 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
         }
     );
 
-    if (singleProductRes.status === 404) {
+    if (productsRes.status === 404) {
         notFound();
     }
 
-    if (!singleProductRes.ok) {
+    if (!productsRes.ok) {
         throw new Error(
-            `Failed to fetch product: ${singleProductRes.status}`
+            `Failed to fetch product: ${productsRes.status}`
         );
     }
 
-    const singleProductData: IProductDetailType =
-        await singleProductRes.json();
+    const productsData: IProductDetailType[] =
+        await productsRes.json();
 
-    if (!singleProductData) {
+    if (!productsData) {
         notFound();
     }
 
-    const singleProductMarket = singleProductData.markets;
+    // const singleProductMarket = singleProductData.markets;
+    const singleProduct: IProductDetailType | undefined = productsData.find((p: IProductDetailType) => p.slug == productid);
+    const pID = singleProduct?.id;
+
+    const res = await fetch(
+        `https://api.abcz.workers.dev/api/bazardor/products/${pID}`,
+        {
+            next: {
+                revalidate: 120,
+            },
+        }
+    );
+    //Error code will be here...
+    if (res.status === 404) {
+        notFound();
+    }
+
+    if (!res.ok) {
+        throw new Error(
+            `Failed to fetch product: ${productsRes.status}`
+        );
+    }
+
+    const productData: IProductDetailType =
+        await res.json();
+
+    if (!productData) {
+        notFound();
+    }
+    const singleProductMarketData = productData.markets
 
     const largestMaxPrice: number = Math.max(
-        ...singleProductMarket.map((item) => item.max)
+        ...singleProductMarketData.map((item) => item.max)
     );
 
     const smallestMaxPrice: number = Math.min(
-        ...singleProductMarket.map((item) => item.min)
+        ...singleProductMarketData.map((item) => item.min)
     );
 
-    const averageOfAverages = singleProductMarket.reduce(
+    const averageOfAverages = singleProductMarketData.reduce(
         (total, item) => total + (item.min + item.max) / 2,
         0
-    ) / singleProductMarket.length;
+    ) / singleProductMarketData.length;
 
     const englishToBanglaNumber = (number: number): string => {
         const banglaDigits: string = "০১২৩৪৫৬৭৮৯";
@@ -112,12 +141,12 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
     };
 
     // Get the Bengali equivalent of the API unit
-    const normalizedUnit = singleProductData.unit.trim().toLowerCase();
+    const normalizedUnit = productData.unit.trim().toLowerCase();
     const banglaUnit =
-        unitTranslations[normalizedUnit] ?? singleProductData.unit;
+        unitTranslations[normalizedUnit] ?? productData.unit;
 
     return (
-        <div className="container mx-auto px-5 py-10">
+        <div className="max-w-7xl mx-auto px-5 py-10">
             <div className="flex flex-col gap-10">
                 {/* Page breadcrumbs */}
                 <div className="flex flex-row gap-2">
@@ -127,14 +156,14 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
 
                     <span>❯</span>
 
-                    <Link href={`/category/${singleProductData.category}`}>
+                    <Link href={`/category/${productData.category}`}>
                         <span className="hover:underline">
-                            {singleProductData.categoryNameBn}
+                            {productData.categoryNameBn}
                         </span>
                     </Link>
 
                     <span>❯</span>
-                    <span>{singleProductData.nameBn}</span>
+                    <span>{productData.nameBn}</span>
                 </div>
 
                 {/* Product title section */}
@@ -146,17 +175,17 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
 
                         <div className="flex flex-col">
                             <h4 className="text-2xl md:text-3xl font-bold">
-                                {singleProductData.nameBn}
+                                {productData.nameBn}
                             </h4>
 
                             <span className="text-gray-500 text-lg">
-                                প্রতি {banglaUnit} · {singleProductData.categoryNameBn}
+                                প্রতি {banglaUnit} · {productData.categoryNameBn}
                             </span>
 
                             <div className="flex gap-1 text-gray-500 text-lg">
                                 <span>গতকালের তুলনায় আজ দাম </span>
 
-                                {singleProductData.today > singleProductData.yesterday ? (
+                                {productData.today > productData.yesterday ? (
                                     <div>
                                         <span className="font-semibold text-gray-600">
                                             বেড়েছে
@@ -165,13 +194,13 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                                         <span>
                                             {" "}
                                             {englishToBanglaNumber(
-                                                singleProductData.today -
-                                                singleProductData.yesterday
+                                                productData.today -
+                                                productData.yesterday
                                             )}{" "}
                                             টাকা
                                         </span>
                                     </div>
-                                ) : singleProductData.today < singleProductData.yesterday ? (
+                                ) : productData.today < productData.yesterday ? (
                                     <div>
                                         <span className="font-semibold text-gray-600">
                                             কমেছে
@@ -181,8 +210,8 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                                             {" "}
                                             {englishToBanglaNumber(
                                                 Math.abs(
-                                                    singleProductData.today -
-                                                    singleProductData.yesterday
+                                                    productData.today -
+                                                    productData.yesterday
                                                 )
                                             )}{" "}
                                             টাকা
@@ -202,31 +231,31 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                         <span>আজকের দাম</span>
 
                         <h2 className="text-2xl md:text-3xl font-bold">
-                            {englishToBanglaNumber(singleProductData.today)}
+                            {englishToBanglaNumber(productData.today)}
                         </h2>
 
                         <span>টাকা / {banglaUnit}</span>
 
                         <span>
-                            {singleProductData.change.dir === "up" ? (
+                            {productData.change.dir === "up" ? (
                                 <span className="flex flex-row gap-1 items-center text-red-600 font-bold">
                                     <IoCaretUpSharp />
                                     {englishToBanglaNumber(
-                                        Math.abs(singleProductData.change.pct)
+                                        Math.abs(productData.change.pct)
                                     )}%
                                 </span>
-                            ) : singleProductData.change.dir === "down" ? (
+                            ) : productData.change.dir === "down" ? (
                                 <div className="flex flex-row items-center gap-1 text-(--primary) font-bold">
                                     <IoCaretDownSharp />
                                     {englishToBanglaNumber(
-                                        Math.abs(singleProductData.change.pct)
+                                        Math.abs(productData.change.pct)
                                     )}%
                                 </div>
                             ) : (
                                 <span className="flex flex-row gap-1 items-center font-bold">
                                     <FiMinus />
                                     ০.{englishToBanglaNumber(
-                                        singleProductData.change.pct
+                                        productData.change.pct
                                     )}%
                                 </span>
                             )}
@@ -291,7 +320,7 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                         </h2>
 
                         <MarketPriceTable
-                            singleProductMarket={singleProductMarket}
+                            singleProductMarket={singleProductMarketData}
                         />
                     </div>
                 </div>
