@@ -1,4 +1,3 @@
-import CategoryTitleSection from "@/components/product/CategoryTitleSection";
 import ProductCard from "@/components/product/ProductCard";
 import { notFound } from "next/navigation";
 
@@ -10,11 +9,7 @@ interface WorkoutDetailPageProps {
 
 const ProductCategoryPage = async ({ params }: WorkoutDetailPageProps) => {
     const { categoryid } = await params;
-    // const productRes = await fetch("https://api.api-store.workers.dev/api/bazardor/products", {
-    //     next: {
-    //         revalidate: 120,
-    //     },
-    // });
+    
     const productRes = await fetch(`https://api.abcz.workers.dev/api/bazardor/products?category=${categoryid}`, {
         next: {
             revalidate: 120,

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Banner = () => {
 
@@ -36,9 +37,11 @@ const Banner = () => {
                 </p>
 
                 {/* Button */}
-                <button className="btn btn-success mt-7 bg-(--primary) hover:bg-(--primary) border-none text-white text-base md:text-lg font-semibold px-7 shadow-md hover:shadow-lg transition-all duration-200">
-                    সব পণ্য দেখুন
-                </button>
+                <Link href="#all-products">
+                    <button className="btn btn-success mt-7 bg-(--primary) hover:bg-(--primary) border-none text-white text-base md:text-lg font-semibold px-7 shadow-md hover:shadow-lg transition-all duration-200">
+                        সব পণ্য দেখুন
+                    </button>
+                </Link>
             </div>
 
             {/* Banner-right: Image section */}

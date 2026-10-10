@@ -17,7 +17,7 @@ const ProductCard = ({ product }: IProductProp) => {
     };
 
     return (
-        <Link href={`/products/${product.slug}`}>
+        <Link href={`/products/${product.id}`}>
             <div className="flex flex-col gap-4 bg-white p-5 rounded-2xl border border-gray-100 hover:border-(--primary) shadow">
                 <div className="flex flex-row items-center gap-4">
                     <div className="flex justify-center items-center">

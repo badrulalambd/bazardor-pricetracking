@@ -1,13 +1,13 @@
 
-interface ICategoryType{
+interface ICategoryType {
     id: string;
     slug: string;
     nameBn: string;
     icon: string;
 }
 
-interface IProductDetailType{
-    id: string,
+interface IProductDetailType {
+    id: number,
     slug: string,
     nameBn: string,
     category: string,
@@ -23,5 +23,17 @@ interface IProductDetailType{
         dir: string;
         pct: number;
     }
-    markets: [];
+    markets: {
+        market: string;
+        division: string;
+        min: number;
+        max: number;
+    }[];
+}
+
+interface IMarketType {
+    market: string;
+    division: string;
+    min: number;
+    max: number;
 }

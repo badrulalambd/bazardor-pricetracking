@@ -72,7 +72,7 @@ const ProductGrid = async () => {
             </div>
 
             {/* সব পণ্য : section */}
-            <div className="flex flex-col gap-4">
+            <div id="all-products" className="flex flex-col gap-4">
                 <h2 className="text-2xl lg:text-4xl font-bold">সব পণ্য</h2>
                 <p className="text-lg text-gray-500">মোট {englishToBanglaNumber(productData.length)}টি পণ্য দেখানো হচ্ছে</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
