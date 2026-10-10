@@ -1,4 +1,5 @@
 import ProductCategoryGrid from "@/components/product/ProductCategoryGrid";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 

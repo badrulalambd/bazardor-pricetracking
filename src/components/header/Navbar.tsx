@@ -5,12 +5,6 @@ import CategoryMenu from "./CategoryMenu";
 import UnserInfo from "./UnserInfo";
 import { notFound } from "next/navigation";
 const Navbar = async () => {
-
-    // const categoryRes = await fetch("https://api.api-store.workers.dev/api/bazardor/categories", {
-    //     next: {
-    //         revalidate: 120,
-    //     },
-    // });
     const categoryRes = await fetch("https://api.abcz.workers.dev/api/bazardor/categories", {
         next: {
             revalidate: 120,
@@ -37,7 +31,7 @@ const Navbar = async () => {
                     {/* Logo  */}
                     <Link href='/'>
                         <div className="flex gap-2">
-                            <div className="p-4 bg-[#05893E] text-white rounded-lg flex items-center">
+                            <div className="p-3 md:p-4 bg-[#05893E] text-white rounded-lg flex items-center">
                                 <Image
 
                                     src='/logo-icon.png'
