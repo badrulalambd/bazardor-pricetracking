@@ -1,5 +1,5 @@
 ## 1. 🛒 Project Title : বাজার দর (BazarDor)
-# Daily Market Prices at a Glance
+### Daily Market Prices at a Glance
 
 ## 2. 📝 Project Short Description
 বাজার দর (BazarDor) is a responsive web application that helps users explore daily prices of essential products across different markets in Bangladesh. Users can browse products by category, compare market prices, view minimum, maximum, and average prices, and track daily price changes through a clean and user-friendly Bengali interface.
@@ -23,7 +23,11 @@
 
 ## 4. ✨ 5 Key Features
 **📊 Daily Product Prices** — View current available prices and daily price changes for essential products.
+
 **🏪 Market-Wise Price Comparison** — Compare minimum, maximum, and average prices across different markets.
+
 **🔎 Category-Based Browsing** — Explore products by category with an organized and responsive product grid.
+
 **↕️ Interactive Price Sorting** — Sort products by price from low to high or high to low.
+
 **🔐 Secure User Authentication** — Sign up, sign in, and authenticate using Better Auth, with Google and GitHub login options.
