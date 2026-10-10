@@ -304,29 +304,35 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className="container mx-auto flex justify-center px-5 py-10">
+        <div className="container mx-auto flex w-full justify-center px-4 py-8 sm:px-5 sm:py-10">
 
-            <div className="flex flex-col gap-5">
-                <div className="flex flex-col justify-center items-center">
-                    <h2 className="text-2xl md:text-3xl font-bold">অ্যাকাউন্ট তৈরি করুন</h2>
-                    <span className="text-lg text-gray-500">বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।</span>
+            <div className="flex w-full max-w-lg flex-col gap-5">
+                <div className="flex w-full flex-col justify-center items-center">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center">
+                        অ্যাকাউন্ট তৈরি করুন
+                    </h2>
+                    <span className="w-full text-center text-lg text-gray-500">
+                        বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
+                    </span>
                 </div>
 
-                <div className="p-5 md:p-8 bg-white rounded-2xl flex flex-col justify-center items-center">
-                    <div>
+                <div className="w-full p-5 md:p-8 bg-white rounded-2xl flex flex-col justify-center items-center">
+                    <div className="w-full">
                         {
                             userExist &&
-                            <div className="w-md mb-3 flex gap-4 text-lg bg-red-700 text-gray-100 items-center rounded-2xl p-5">
-                                <IoIosWarning className="text-yellow-400 text-2xl" />
-                                <span>এই ইমেইল দিয়ে আগে থেকেই একটি অ্যাকাউন্ট আছে। সাইন ইন করে নিন।</span>
+                            <div className="w-full mb-3 flex gap-4 text-lg bg-red-700 text-gray-100 items-center rounded-2xl p-5">
+                                <IoIosWarning className="shrink-0 text-yellow-400 text-2xl" />
+                                <span className="min-w-0 break-words">
+                                    এই ইমেইল দিয়ে আগে থেকেই একটি অ্যাকাউন্ট আছে। সাইন ইন করে নিন।
+                                </span>
                             </div>
                         }
                     </div>
 
-                    <form onSubmit={handleOnSubmit} noValidate>
-                        <fieldset className="fieldset sm md:w-md">
+                    <form onSubmit={handleOnSubmit} noValidate className="w-full">
+                        <fieldset className="fieldset w-full">
 
-                            <label className="label block w-sm md:w-md">
+                            <label className="label block w-full">
                                 <span className="text-lg text-(--base-content)">নাম</span>
 
                                 <input
@@ -337,7 +343,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("name")}
                                     aria-invalid={Boolean(errors.name)}
                                     aria-describedby={errors.name ? "name-error" : undefined}
-                                    className="input block text-[16px] w-sm md:w-md mb-2"
+                                    className="input block text-[16px] w-full mb-2"
                                     placeholder="যেমন: রহিম উদ্দিন"
                                 />
 
@@ -348,7 +354,7 @@ const SignUpPage = () => {
                                 )}
                             </label>
 
-                            <label className="label block w-sm md:w-md">
+                            <label className="label block w-full">
                                 <span className="text-lg text-(--base-content)">ইমেইল</span>
 
                                 <input
@@ -359,7 +365,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("email")}
                                     aria-invalid={Boolean(errors.email)}
                                     aria-describedby={errors.email ? "email-error" : undefined}
-                                    className="input block text-[16px] w-sm md:w-md mb-2"
+                                    className="input block text-[16px] w-full mb-2"
                                     placeholder="you@example.com"
                                 />
 
@@ -370,7 +376,7 @@ const SignUpPage = () => {
                                 )}
                             </label>
 
-                            <label className="label block w-sm md:w-md">
+                            <label className="label block w-full">
                                 <span className="text-lg text-(--base-content)">পাসওয়ার্ড</span>
 
                                 <input
@@ -381,7 +387,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("password")}
                                     aria-invalid={Boolean(errors.password)}
                                     aria-describedby={errors.password ? "password-error" : undefined}
-                                    className="input block text-[16px] w-sm md:w-md mb-2"
+                                    className="input block text-[16px] w-full mb-2"
                                     placeholder="কমপক্ষে ৮ অক্ষর"
                                 />
 
@@ -392,7 +398,7 @@ const SignUpPage = () => {
                                 )}
                             </label>
 
-                            <label className="label block w-sm md:w-md">
+                            <label className="label block w-full">
                                 <span className="text-lg text-(--base-content)">পাসওয়ার্ড নিশ্চিত করুন</span>
 
                                 <input
@@ -403,7 +409,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("cpassword")}
                                     aria-invalid={Boolean(errors.cpassword)}
                                     aria-describedby={errors.cpassword ? "cpassword-error" : undefined}
-                                    className="input block text-[16px] w-sm md:w-md"
+                                    className="input block text-[16px] w-full"
                                     placeholder="আবার লিখুন"
                                 />
 
@@ -416,29 +422,38 @@ const SignUpPage = () => {
 
                             <button
                                 type="submit"
-                                className="w-sm md:w-md btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-sm md:text-lg font-semibold text-white shadow border border-[#047F39] p-5"
+                                className="w-full btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-sm sm:text-lg font-semibold text-white shadow border border-[#047F39] p-5"
                             >
                                 অ্যাকাউন্ট তৈরি করুন
                             </button>
                         </fieldset>
                     </form>
 
-                    <div className="divider w-sm md:w-md">অথবা</div>
+                    <div className="divider w-full">অথবা</div>
 
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-2">
-                        <button onClick={handleGoogleLogin} className="btn btn-outline">
+                    <div className="flex w-full flex-col md:flex-row items-center justify-center gap-2.5">
+                        <button
+                            onClick={handleGoogleLogin}
+                            className="btn btn-outline w-full md:w-auto"
+                        >
                             <FcGoogle />Google দিয়ে চালিয়ে যান
                         </button>
 
-                        <button onClick={handleGithubLogin} className="btn btn-outline">
+                        <button
+                            onClick={handleGithubLogin}
+                            className="btn btn-outline w-full md:w-auto"
+                        >
                             <FaGithub />GitHub দিয়ে চালিয়ে যান
                         </button>
                     </div>
 
-                    <div className="flex justify-center mt-5">
-                        <span className="text-lg text-gray-500">
+                    <div className="flex w-full justify-center mt-5">
+                        <span className="text-center text-lg text-gray-500">
                             অ্যাকাউন্ট আছে?{" "}
-                            <Link className="text-(--primary) underline hover:text-(--primary-strong)" href="/signin">
+                            <Link
+                                className="text-(--primary) underline hover:text-(--primary-strong)"
+                                href="/signin"
+                            >
                                 সাইন ইন করুন
                             </Link>
                         </span>
@@ -447,7 +462,9 @@ const SignUpPage = () => {
 
                 <div className="flex justify-center">
                     <Link href="/">
-                        <span className="underline text-lg text-gray-500">← হোম পেজে ফিরে যান</span>
+                        <span className="underline text-lg text-gray-500">
+                            ← হোম পেজে ফিরে যান
+                        </span>
                     </Link>
                 </div>
             </div>
