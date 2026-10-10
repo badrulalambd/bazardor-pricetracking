@@ -312,7 +312,7 @@ const SignUpPage = () => {
                     <span className="text-lg text-gray-500">বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।</span>
                 </div>
 
-                <div className="p-5 md:p-8 bg-white rounded-2xl flex flex-col">
+                <div className="p-5 md:p-8 bg-white rounded-2xl flex flex-col justify-center items-center">
                     <div>
                         {
                             userExist &&
@@ -324,9 +324,9 @@ const SignUpPage = () => {
                     </div>
 
                     <form onSubmit={handleOnSubmit} noValidate>
-                        <fieldset className="fieldset w-md">
+                        <fieldset className="fieldset sm md:w-md">
 
-                            <label className="label block">
+                            <label className="label block w-sm md:w-md">
                                 <span className="text-lg text-(--base-content)">নাম</span>
 
                                 <input
@@ -337,7 +337,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("name")}
                                     aria-invalid={Boolean(errors.name)}
                                     aria-describedby={errors.name ? "name-error" : undefined}
-                                    className="input block text-[16px] w-md mb-2"
+                                    className="input block text-[16px] w-sm md:w-md mb-2"
                                     placeholder="যেমন: রহিম উদ্দিন"
                                 />
 
@@ -348,7 +348,7 @@ const SignUpPage = () => {
                                 )}
                             </label>
 
-                            <label className="label block">
+                            <label className="label block w-sm md:w-md">
                                 <span className="text-lg text-(--base-content)">ইমেইল</span>
 
                                 <input
@@ -359,7 +359,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("email")}
                                     aria-invalid={Boolean(errors.email)}
                                     aria-describedby={errors.email ? "email-error" : undefined}
-                                    className="input block text-[16px] w-md mb-2"
+                                    className="input block text-[16px] w-sm md:w-md mb-2"
                                     placeholder="you@example.com"
                                 />
 
@@ -370,7 +370,7 @@ const SignUpPage = () => {
                                 )}
                             </label>
 
-                            <label className="label block">
+                            <label className="label block w-sm md:w-md">
                                 <span className="text-lg text-(--base-content)">পাসওয়ার্ড</span>
 
                                 <input
@@ -381,7 +381,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("password")}
                                     aria-invalid={Boolean(errors.password)}
                                     aria-describedby={errors.password ? "password-error" : undefined}
-                                    className="input block text-[16px] w-md mb-2"
+                                    className="input block text-[16px] w-sm md:w-md mb-2"
                                     placeholder="কমপক্ষে ৮ অক্ষর"
                                 />
 
@@ -392,7 +392,7 @@ const SignUpPage = () => {
                                 )}
                             </label>
 
-                            <label className="label block">
+                            <label className="label block w-sm md:w-md">
                                 <span className="text-lg text-(--base-content)">পাসওয়ার্ড নিশ্চিত করুন</span>
 
                                 <input
@@ -403,7 +403,7 @@ const SignUpPage = () => {
                                     onBlur={() => handleInputBlur("cpassword")}
                                     aria-invalid={Boolean(errors.cpassword)}
                                     aria-describedby={errors.cpassword ? "cpassword-error" : undefined}
-                                    className="input block text-[16px] w-md"
+                                    className="input block text-[16px] w-sm md:w-md"
                                     placeholder="আবার লিখুন"
                                 />
 
@@ -416,16 +416,16 @@ const SignUpPage = () => {
 
                             <button
                                 type="submit"
-                                className="btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-lg font-semibold text-white shadow border border-[#047F39] p-5"
+                                className="w-sm md:w-md btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-sm md:text-lg font-semibold text-white shadow border border-[#047F39] p-5"
                             >
                                 অ্যাকাউন্ট তৈরি করুন
                             </button>
                         </fieldset>
                     </form>
 
-                    <div className="divider">অথবা</div>
+                    <div className="divider w-sm md:w-md">অথবা</div>
 
-                    <div className="flex justify-center gap-2.5">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-2">
                         <button onClick={handleGoogleLogin} className="btn btn-outline">
                             <FcGoogle />Google দিয়ে চালিয়ে যান
                         </button>

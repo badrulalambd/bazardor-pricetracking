@@ -17,8 +17,8 @@ const CategoryMenu = ({ category }: ICategoryProps) => {
     
     return (
         <Link href={`/category/${category.slug}`}>
-            <button className={isActive ? "btn btn-ghost bg-[#05893E] text-white border-[#05893E] hover:bg-[#047533]" : "btn btn-ghost"}>
-                <div className="flex shrink-0 flex-row gap-2 text-lg font-semibold whitespace-nowrap">
+            <button className={isActive ? "btn btn-ghost bg-[#05893E] text-white border-[#05893E] hover:bg-[#047533] p-2 md:p-3" : "btn btn-ghost p-2 md:p-3"}>
+                <div className="flex shrink-0 flex-row gap-2 text-sm md:text-lg font-semibold whitespace-nowrap">
                     <span>{category.icon}</span>
                     <span>{category.nameBn}</span>
                 </div>

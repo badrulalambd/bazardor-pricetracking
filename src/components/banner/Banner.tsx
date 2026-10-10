@@ -13,7 +13,7 @@ const Banner = () => {
     }).format();
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-10 gap-8 lg:gap-12 bg-white p-6 md:p-10 lg:p-12 rounded-2xl shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-10 gap-5 md:gap-8 lg:gap-12 bg-white p-6 md:p-10 lg:p-12 rounded-2xl shadow-sm border border-gray-100">
 
             {/* Banner-left: Text section */}
             <div className="md:col-span-6 flex flex-col justify-center items-start">
@@ -24,7 +24,7 @@ const Banner = () => {
                 </span>
 
                 {/* Heading */}
-                <h2 className="text-4xl md:text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight text-gray-900">
+                <h2 className="text-3xl md:text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight text-gray-900">
                     আজকের বাজারের দাম
                     <span className="block text-(--primary)">
                         এক নজরে

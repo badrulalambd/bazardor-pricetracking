@@ -33,7 +33,7 @@ const Navbar = async () => {
         <div className="bg-(--bg-blue-100)">
             {/* Header-top: logo+buttons */}
             <div className="max-w-7xl mx-auto">
-                <div className="flex gap-5 justify-between px-5 py-4">
+                <div className="flex gap-2 md:gap-5 justify-between px-5 py-4">
                     {/* Logo  */}
                     <Link href='/'>
                         <div className="flex gap-2">
@@ -47,8 +47,8 @@ const Navbar = async () => {
                                 />
                             </div>
                             <div className="flex flex-col gap-0">
-                                <h2 className="text-2xl text-(--base-content) font-bold">বাজার দর</h2>
-                                <span className="text-gray-500">{date}</span>
+                                <h2 className="text-2xl md:text-3xl text-(--base-content) font-bold">বাজার দর</h2>
+                                <span className="text-xs md:text-sm text-gray-500">{date}</span>
                             </div>
                         </div>
                     </Link>
