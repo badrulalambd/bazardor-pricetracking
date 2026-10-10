@@ -3,30 +3,156 @@
 import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { FaGithub } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 import { IoIosWarning } from 'react-icons/io';
 import { Bounce, toast } from 'react-toastify';
 
+interface FormValues {
+    email: string;
+    password: string;
+}
+
+type FieldName = keyof FormValues;
+type FormErrors = Partial<Record<FieldName, string>>;
+
+const initialValues: FormValues = {
+    email: "",
+    password: "",
+};
+
 const SignInPage = () => {
-
     const [userExist, setUserExist] = useState<boolean>(false);
+    const [formValues, setFormValues] = useState<FormValues>(initialValues);
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
-    const handleOnSubmite = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    // Validate individual fields
+    const validateField = (
+        field: FieldName,
+        values: FormValues
+    ): string | undefined => {
+        switch (field) {
+            case "email":
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+                    return "সঠিক ইমেইল ঠিকানা লিখুন।";
+                }
+                break;
+
+            case "password":
+                if (values.password.length < 8) {
+                    return "•• পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।";
+                }
+                break;
+        }
+
+        return undefined;
+    };
+
+    // Validate all fields before submission
+    const validateForm = (values: FormValues): FormErrors => {
+        const nextErrors: FormErrors = {};
+
+        const fields: FieldName[] = ["email", "password"];
+
+        fields.forEach((field) => {
+            const message = validateField(field, values);
+
+            if (message) {
+                nextErrors[field] = message;
+            }
+        });
+
+        return nextErrors;
+    };
+
+    // Handle input changes
+    const handleInputChange =
+        (field: FieldName) =>
+        (e: ChangeEvent<HTMLInputElement>) => {
+            const nextValues: FormValues = {
+                ...formValues,
+                [field]: e.target.value,
+            };
+
+            setFormValues(nextValues);
+
+            if (hasSubmitted || touched[field]) {
+                const message = validateField(field, nextValues);
+
+                setErrors((currentErrors) => {
+                    const updatedErrors = { ...currentErrors };
+
+                    if (message) {
+                        updatedErrors[field] = message;
+                    } else {
+                        delete updatedErrors[field];
+                    }
+
+                    return updatedErrors;
+                });
+            }
+        };
+
+    // Validate a field when the user leaves it
+    const handleInputBlur = (field: FieldName) => {
+        setTouched((current) => ({
+            ...current,
+            [field]: true,
+        }));
+
+        const message = validateField(field, formValues);
+
+        setErrors((currentErrors) => {
+            const updatedErrors = { ...currentErrors };
+
+            if (message) {
+                updatedErrors[field] = message;
+            } else {
+                delete updatedErrors[field];
+            }
+
+            return updatedErrors;
+        });
+    };
+
+    const handleOnSubmite = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const user = Object.fromEntries(formData.entries()) as { email: string, password: string }
+
+        setHasSubmitted(true);
+
+        const validationErrors = validateForm(formValues);
+        setErrors(validationErrors);
+
+        // Show field errors and toast if the form is invalid
+        if (Object.keys(validationErrors).length > 0) {
+            toast.error("ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+            return;
+        }
 
         const { data, error } = await authClient.signIn.email({
-            email: user.email,
-            password: user.password,
+            email: formValues.email.trim(),
+            password: formValues.password,
             rememberMe: true,
             callbackURL: "/",
         });
 
         if (data) {
             setUserExist(false);
+
             toast.success('Successfully logged in!', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -40,6 +166,7 @@ const SignInPage = () => {
             });
         } else {
             setUserExist(true);
+
             toast.success('Failed to login', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -52,8 +179,7 @@ const SignInPage = () => {
                 transition: Bounce,
             });
         }
-
-    }
+    };
 
     const handleGoogleLogin = async () => {
         const { data, error } = await authClient.signIn.social({
@@ -62,6 +188,7 @@ const SignInPage = () => {
 
         if (data) {
             console.log("Login successfull!", data);
+
             toast.success('Login successfull!', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -73,9 +200,11 @@ const SignInPage = () => {
                 theme: "colored",
                 transition: Bounce,
             });
+
             redirect("/");
         } else {
             console.log("Login failed", error);
+
             toast.error('Login failed', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -91,12 +220,13 @@ const SignInPage = () => {
     };
 
     const handleGithubLogin = async () => {
-        const {data, error} = await authClient.signIn.social({
+        const { data, error } = await authClient.signIn.social({
             provider: "github"
         });
 
         if (data) {
             console.log("Login successfull!", data);
+
             toast.success('Login successfull!', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -108,9 +238,11 @@ const SignInPage = () => {
                 theme: "colored",
                 transition: Bounce,
             });
+
             redirect("/");
         } else {
             console.log("Login failed", error);
+
             toast.error('Login failed', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -123,7 +255,7 @@ const SignInPage = () => {
                 transition: Bounce,
             });
         }
-    }
+    };
 
     return (
         <div className="container mx-auto flex justify-center px-5 py-10">
@@ -144,15 +276,52 @@ const SignInPage = () => {
                             </div>
                         }
                     </div>
-                    <form onSubmit={handleOnSubmite}>
+
+                    <form onSubmit={handleOnSubmite} noValidate>
                         <fieldset className="fieldset w-md">
 
-                            <label className="label block"><span className="text-lg text-(--base-content)">ইমেইল</span>
-                                <input type="email" name="email" className="input block text-[16px] w-md mb-2" placeholder="you@example.com" />
+                            <label className="label block">
+                                <span className="text-lg text-(--base-content)">ইমেইল</span>
+
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formValues.email}
+                                    onChange={handleInputChange("email")}
+                                    onBlur={() => handleInputBlur("email")}
+                                    aria-invalid={Boolean(errors.email)}
+                                    aria-describedby={errors.email ? "email-error" : undefined}
+                                    className="input block text-[16px] w-md mb-2"
+                                    placeholder="you@example.com"
+                                />
+
+                                {errors.email && (
+                                    <p id="email-error" className="text-red-600 text-sm mb-2">
+                                        {errors.email}
+                                    </p>
+                                )}
                             </label>
 
-                            <label className="label block"><span className="text-lg text-(--base-content)">পাসওয়ার্ড</span>
-                                <input type="password" name="password" className="input block text-[16px] w-md mb-2" placeholder="কমপক্ষে ৮ অক্ষর" />
+                            <label className="label block">
+                                <span className="text-lg text-(--base-content)">পাসওয়ার্ড</span>
+
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formValues.password}
+                                    onChange={handleInputChange("password")}
+                                    onBlur={() => handleInputBlur("password")}
+                                    aria-invalid={Boolean(errors.password)}
+                                    aria-describedby={errors.password ? "password-error" : undefined}
+                                    className="input block text-[16px] w-md mb-2"
+                                    placeholder="কমপক্ষে ৮ অক্ষর"
+                                />
+
+                                {errors.password && (
+                                    <p id="password-error" className="text-red-600 text-sm mb-2">
+                                        {errors.password}
+                                    </p>
+                                )}
                             </label>
 
                             <button type='submit' className="btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-lg font-semibold text-white shadow border border-[#047F39] p-5">সাইন ইন</button>

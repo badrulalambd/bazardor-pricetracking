@@ -1,4 +1,4 @@
-import ProductCard from "@/components/product/ProductCard";
+import ProductCategoryGrid from "@/components/product/ProductCategoryGrid";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -8,7 +8,6 @@ interface ProductCategoryPageProps {
     }>;
 }
 
-// Main page: render the Suspense boundary without awaiting params.
 export default function ProductCategoryPage({
     params,
 }: ProductCategoryPageProps) {
@@ -16,9 +15,7 @@ export default function ProductCategoryPage({
         <Suspense
             fallback={
                 <div className="container mx-auto px-5 py-10">
-                    <p className="py-12 text-center text-gray-500">
-                        Loading...
-                    </p>
+                    Loading...
                 </div>
             }
         >
@@ -27,13 +24,11 @@ export default function ProductCategoryPage({
     );
 }
 
-// Async component: URL params and API data are accessed inside Suspense.
 async function ProductCategoryContent({
     params,
 }: ProductCategoryPageProps) {
     const { categoryid } = await params;
 
-    // Fetch product and category data simultaneously.
     const [productRes, categoryRes] = await Promise.all([
         fetch(
             `https://api.abcz.workers.dev/api/bazardor/products?category=${encodeURIComponent(categoryid)}`,
@@ -43,7 +38,6 @@ async function ProductCategoryContent({
                 },
             }
         ),
-
         fetch(
             `https://api.abcz.workers.dev/api/bazardor/categories/${encodeURIComponent(categoryid)}`,
             {
@@ -54,28 +48,22 @@ async function ProductCategoryContent({
         ),
     ]);
 
-    // Handle missing resources.
-    if (
-        productRes.status === 404 ||
-        categoryRes.status === 404
-    ) {
+    if (productRes.status === 404 || categoryRes.status === 404) {
         notFound();
     }
 
-    // Don't treat server errors or rate limits as a 404.
     if (!productRes.ok) {
         throw new Error(
-            `Failed to fetch products. Status: ${productRes.status}`
+            `Failed to fetch products: ${productRes.status}`
         );
     }
 
     if (!categoryRes.ok) {
         throw new Error(
-            `Failed to fetch category. Status: ${categoryRes.status}`
+            `Failed to fetch category: ${categoryRes.status}`
         );
     }
 
-    // Validate the API response shapes.
     const productJson: unknown = await productRes.json();
     const categoryJson: unknown = await categoryRes.json();
 
@@ -84,7 +72,7 @@ async function ProductCategoryContent({
     }
 
     if (
-        categoryJson === null ||
+        !categoryJson ||
         typeof categoryJson !== "object" ||
         Array.isArray(categoryJson)
     ) {
@@ -96,16 +84,12 @@ async function ProductCategoryContent({
 
     const categoryData = categoryJson as ICategoryType;
 
-    // Convert English digits to Bengali digits.
     const englishToBanglaNumber = (number: number): string => {
         const banglaDigits = "০১২৩৪৫৬৭৮৯";
 
         return number
             .toString()
-            .replace(
-                /\d/g,
-                (digit) => banglaDigits[Number(digit)]
-            );
+            .replace(/\d/g, (digit) => banglaDigits[Number(digit)]);
     };
 
     return (
@@ -136,32 +120,9 @@ async function ProductCategoryContent({
                 </div>
 
                 {/* Products section */}
-                <div className="flex flex-col gap-4">
-                    <p className="text-lg text-gray-500">
-                        মোট{" "}
-                        {englishToBanglaNumber(
-                            productCategoryData.length
-                        )}
-                        টি পণ্য দেখানো হচ্ছে
-                    </p>
-
-                    {productCategoryData.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                            {productCategoryData.map(
-                                (product: IProductDetailType) => (
-                                    <ProductCard
-                                        key={product.id}
-                                        product={product}
-                                    />
-                                )
-                            )}
-                        </div>
-                    ) : (
-                        <p className="rounded-2xl bg-white p-6 text-center text-gray-500">
-                            এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি।
-                        </p>
-                    )}
-                </div>
+                <ProductCategoryGrid
+                    productCategoryData={productCategoryData}
+                />
             </div>
         </div>
     );
