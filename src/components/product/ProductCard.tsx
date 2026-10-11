@@ -63,7 +63,7 @@ const ProductCard = ({ product }: IProductProp) => {
             <div className="flex flex-col gap-4 bg-white p-5 rounded-2xl border border-gray-100 hover:border-(--primary) shadow">
                 <div className="flex flex-row items-center gap-4">
                     <div className="flex justify-center items-center">
-                        <span className="bg-(--bg-blue-200) rounded-xl p-4">{product.categoryIcon}</span>
+                        <span className="bg-(--bg-blue-200) rounded-xl p-4">{product.image}</span>
                     </div>
                     <div className="flex flex-col">
                         <h4 className="text-xl md:text-2xl font-bold">{product.nameBn}</h4>

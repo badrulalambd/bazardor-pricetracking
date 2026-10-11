@@ -170,7 +170,7 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                 <div className="bg-(--bg-blue-100) p-5 md:p-8 rounded-2xl flex flex-col md:flex-row justify-between gap-3 border border-gray-200">
                     <div className="flex flex-row items-center gap-3">
                         <div className="flex justify-center items-center">
-                            <span className="text-6xl">🍚</span>
+                            <span className="text-6xl">{productData.image}</span>
                         </div>
 
                         <div className="flex flex-col">

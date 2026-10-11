@@ -20,7 +20,7 @@ const MarqueeHeading = ({ product }: IProductProp) => {
 
     return (
         <div className="flex flex-row items-center gap-1 text-lg">
-            <span>{product.categoryIcon}</span>
+            <span>{product.image}</span>
             <span>{product.nameBn}</span>
             <span className="text-gray-600">{englishToBanglaNumber(product.today)}</span>
             <span className="text-gray-600"> টাকা/কেজি</span>
