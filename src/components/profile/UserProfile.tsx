@@ -1,9 +1,9 @@
+
 "use client";
 
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Bounce, toast } from "react-toastify";
-import { useState } from "react";
 
 const UserProfile = () => {
     const { data: session } = authClient.useSession();
@@ -16,6 +16,7 @@ const UserProfile = () => {
                 onSuccess: () => {
                     router.replace("/");
                     router.refresh();
+
                     toast.success('Logout successful!', {
                         position: "bottom-right",
                         autoClose: 5000,
@@ -30,6 +31,7 @@ const UserProfile = () => {
                 },
                 onError: (ctx) => {
                     console.error("Logout failed", ctx.error);
+
                     toast.success('Logged out success!', {
                         position: "bottom-right",
                         autoClose: 5000,
@@ -44,7 +46,7 @@ const UserProfile = () => {
                 },
             },
         });
-    }
+    };
 
     const handleProfileUpdate = async (
         e: React.FormEvent<HTMLFormElement>
@@ -79,44 +81,85 @@ const UserProfile = () => {
     };
 
     return (
-        <div className="container mx-auto flex justify-center px-5 py-10">
-            <div className="flex flex-col gap-5">
+        <div className="w-full max-w-7xl mx-auto flex justify-center px-4 py-8 sm:px-5 sm:py-10">
+            <div className="w-full max-w-xl flex flex-col gap-5">
+
                 <div className="flex flex-col">
-                    <h2 className="text-2xl md:text-3xl font-bold">আমার প্রোফাইল</h2>
-                    <span className="text-lg text-gray-500">আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।</span>
+                    <h2 className="text-2xl md:text-3xl font-bold">
+                        আমার প্রোফাইল
+                    </h2>
+
+                    <span className="text-lg text-gray-500">
+                        আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।
+                    </span>
                 </div>
 
-                <div className="p-5 md:p-8 bg-white rounded-2xl">
-                    <div className="flex flex-row justify-between items-center gap-3">
-                        <div className="flex flex-row gap-3">
-                            <div className="flex justify-center items-center">
-                                <span className='px-5 py-3 text-lg md:text-xl bg-(--primary) text-white font-bold rounded-4xl'>{user?.name.charAt(0)}</span>
+                <div className="w-full p-5 md:p-8 bg-white rounded-2xl">
+                    <div className="flex flex-row justify-between items-center gap-4">
+
+                        <div className="min-w-0 flex flex-row gap-3">
+                            <div className="flex shrink-0 justify-center items-center">
+                                <span className="px-5 py-3 text-lg md:text-xl bg-(--primary) text-white font-bold rounded-4xl">
+                                    {user?.name.charAt(0)}
+                                </span>
                             </div>
-                            <div>
-                                <h3 className='font-semibold text-lg md:text-xl'>{user?.name}</h3>
-                                <span className='text-[12px] font-light text-gray-400'>{user?.email}</span>
+
+                            <div className="min-w-0">
+                                <h3 className="font-semibold text-lg md:text-xl break-words">
+                                    {user?.name}
+                                </h3>
+
+                                <span className="block text-[12px] font-light text-gray-400 break-all">
+                                    {user?.email}
+                                </span>
                             </div>
                         </div>
-                        <div>
-                            <button onClick={handleSignout} className="btn btn-neutral btn-outline border border-red-700 hover:bg-red-700 text-red-700 hover:text-white btn-md md:btn-lg">↩ সাইন আউট</button>
+
+                        <div className="shrink-0">
+                            <button
+                                onClick={handleSignout}
+                                className="btn btn-neutral btn-outline border border-red-700 hover:bg-red-700 text-red-700 hover:text-white btn-md md:btn-lg"
+                            >
+                                ↩ সাইন আউট
+                            </button>
                         </div>
 
                     </div>
                 </div>
 
-                <div className="p-5 md:p-8 bg-white rounded-2xl flex flex-col">
-                    <h3 className="text-lg md:text-2xl font-bold">তথ্য</h3>
-                    <form onSubmit={handleProfileUpdate}>
-                        <fieldset className="fieldset w-md">
+                <div className="w-full p-5 md:p-8 bg-white rounded-2xl flex flex-col">
+                    <h3 className="text-lg md:text-2xl font-bold">
+                        তথ্য
+                    </h3>
 
-                            <label className="label block"><span className="text-lg text-(--base-content)">নাম </span>
-                                <input type="text" name="name" className="input block text-[16px] w-md md:w-lg mb-2" defaultValue={user?.name ?? ""} placeholder="যেমন: রহিম উদ্দিন" />
+                    <form onSubmit={handleProfileUpdate} className="w-full">
+                        <fieldset className="fieldset w-full">
+
+                            <label className="label block w-full">
+                                <span className="text-lg text-(--base-content)">
+                                    নাম
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className="input block text-[16px] w-full mb-2"
+                                    defaultValue={user?.name ?? ""}
+                                    placeholder="যেমন: রহিম উদ্দিন"
+                                />
                             </label>
 
-                            <button type='submit' className="btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-lg font-semibold text-white shadow border border-[#047F39] p-5">আপডেট</button>
+                            <button
+                                type="submit"
+                                className="w-full sm:w-auto btn btn-success mt-4 bg-(--primary) hover:bg-[#047F39] text-lg font-semibold text-white shadow border border-[#047F39] p-5"
+                            >
+                                আপডেট
+                            </button>
+
                         </fieldset>
                     </form>
                 </div>
+
             </div>
         </div>
     );

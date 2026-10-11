@@ -45,7 +45,7 @@ const UnserInfo = () => {
                 user ?
                     <div className="dropdown dropdown-bottom dropdown-end">
                         <div tabIndex={0}>
-                            <button className="btn btn-ghost flex max-w-full flex-row justify-center items-center gap-2">
+                            <button tabIndex={0} className="btn btn-ghost flex max-w-full flex-row justify-center items-center gap-2">
                                 <span className="shrink-0 px-5 py-1 bg-(--primary) text-white font-bold rounded-4xl">
                                     {user?.name.charAt(0)}
                                 </span>
@@ -57,13 +57,12 @@ const UnserInfo = () => {
                                 <FaCaretDown className="shrink-0" />
                             </button>
                         </div>
-
                         <div
                             tabIndex={-1}
                             className="dropdown-content menu bg-base-100 rounded-box z-50 w-75 max-w-[calc(100vw-2rem)] px-3 pb-2 pt-5 shadow-sm flex flex-col"
                         >
                             <div className="min-w-0 px-1 mb-2">
-                                <h3 className="font-semibold text-gray-400 break-words">
+                                <h3 className="font-semibold text-gray-400 wrap-break-word">
                                     {user?.name}
                                 </h3>
 
