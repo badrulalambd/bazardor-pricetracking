@@ -186,37 +186,31 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                                 <span>গতকালের তুলনায় আজ দাম </span>
 
                                 {productData.today > productData.yesterday ? (
-                                    <div>
-                                        <span className="font-semibold text-gray-600">
-                                            বেড়েছে
-                                        </span>
 
-                                        <span>
-                                            {" "}
-                                            {englishToBanglaNumber(
+                                    <span>
+                                        <span className="font-semibold text-gray-600">বেড়েছে</span>
+                                        {" "}
+                                        {englishToBanglaNumber(
+                                            productData.today -
+                                            productData.yesterday
+                                        )}{" "}
+                                        টাকা
+                                    </span>
+
+                                ) : productData.today < productData.yesterday ? (
+
+                                    <span>
+                                        <span className="font-semibold text-gray-600">কমেছে</span>
+                                        {" "}
+                                        {englishToBanglaNumber(
+                                            Math.abs(
                                                 productData.today -
                                                 productData.yesterday
-                                            )}{" "}
-                                            টাকা
-                                        </span>
-                                    </div>
-                                ) : productData.today < productData.yesterday ? (
-                                    <div>
-                                        <span className="font-semibold text-gray-600">
-                                            কমেছে
-                                        </span>
+                                            )
+                                        )}{" "}
+                                        টাকা
+                                    </span>
 
-                                        <span>
-                                            {" "}
-                                            {englishToBanglaNumber(
-                                                Math.abs(
-                                                    productData.today -
-                                                    productData.yesterday
-                                                )
-                                            )}{" "}
-                                            টাকা
-                                        </span>
-                                    </div>
                                 ) : (
                                     <span className="font-semibold text-gray-600">
                                         অপরিবর্তিত
@@ -262,6 +256,7 @@ async function ProductDetailContent({ params }: ProductDetailProp) {
                         </span>
                     </div>
                 </div>
+
 
                 {/* Product detail information section */}
                 <div className="bg-(--bg-blue-100) p-5 md:p-8 rounded-2xl flex flex-col gap-3 border border-gray-200">
