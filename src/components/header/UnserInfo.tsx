@@ -1,10 +1,10 @@
 'use client'
+
 import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaCaretDown } from 'react-icons/fa6';
-import { Bounce, toast } from 'react-toastify';
-
+import toast from 'react-hot-toast';
 
 const UnserInfo = () => {
 
@@ -17,9 +17,8 @@ const UnserInfo = () => {
             fetchOptions: {
                 onSuccess: () => {
                     toast.success("Logout successful!", {
-                        position: "bottom-right",
-                        theme: "dark",
-                        transition: Bounce,
+                        position: "top-center",
+                        duration: 5000,
                     });
 
                     router.replace("/");
@@ -29,9 +28,8 @@ const UnserInfo = () => {
                     console.error("Logout failed:", ctx.error);
 
                     toast.error("লগআউট করা যায়নি!", {
-                        position: "bottom-right",
-                        theme: "dark",
-                        transition: Bounce,
+                        position: "top-center",
+                        duration: 5000,
                     });
                 },
             },

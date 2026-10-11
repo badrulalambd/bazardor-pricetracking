@@ -3,7 +3,7 @@
 
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Bounce, toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
     const { data: session } = authClient.useSession();
@@ -17,31 +17,17 @@ const UserProfile = () => {
                     router.replace("/");
                     router.refresh();
 
-                    toast.success('Logout successful!', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: false,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                        transition: Bounce,
+                    toast.success("Logout successful!", {
+                        position: "top-center",
+                        duration: 5000,
                     });
                 },
                 onError: (ctx) => {
                     console.error("Logout failed", ctx.error);
 
-                    toast.success('Logged out success!', {
-                        position: "bottom-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: false,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                        transition: Bounce,
+                    toast.error("লগআউট করা যায়নি!", {
+                        position: "top-center",
+                        duration: 5000,
                     });
                 },
             },
@@ -64,18 +50,16 @@ const UserProfile = () => {
 
         if (error) {
             toast.error("প্রোফাইল আপডেট করা যায়নি!", {
-                position: "bottom-right",
-                theme: "dark",
-                transition: Bounce,
+                position: "top-center",
+                duration: 5000,
             });
             return;
         }
 
         if (data) {
             toast.success("প্রোফাইল সফলভাবে আপডেট হয়েছে!", {
-                position: "bottom-right",
-                theme: "colored",
-                transition: Bounce,
+                position: "top-center",
+                duration: 5000,
             });
         }
     };

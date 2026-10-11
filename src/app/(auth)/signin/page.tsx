@@ -1,13 +1,13 @@
+
 'use client'
 
 import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { FaGithub } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 import { IoIosWarning } from 'react-icons/io';
-import { Bounce, toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 interface FormValues {
     email: string;
@@ -71,30 +71,30 @@ const SignInPage = () => {
     // Handle input changes
     const handleInputChange =
         (field: FieldName) =>
-            (e: ChangeEvent<HTMLInputElement>) => {
-                const nextValues: FormValues = {
-                    ...formValues,
-                    [field]: e.target.value,
-                };
-
-                setFormValues(nextValues);
-
-                if (hasSubmitted || touched[field]) {
-                    const message = validateField(field, nextValues);
-
-                    setErrors((currentErrors) => {
-                        const updatedErrors = { ...currentErrors };
-
-                        if (message) {
-                            updatedErrors[field] = message;
-                        } else {
-                            delete updatedErrors[field];
-                        }
-
-                        return updatedErrors;
-                    });
-                }
+        (e: ChangeEvent<HTMLInputElement>) => {
+            const nextValues: FormValues = {
+                ...formValues,
+                [field]: e.target.value,
             };
+
+            setFormValues(nextValues);
+
+            if (hasSubmitted || touched[field]) {
+                const message = validateField(field, nextValues);
+
+                setErrors((currentErrors) => {
+                    const updatedErrors = { ...currentErrors };
+
+                    if (message) {
+                        updatedErrors[field] = message;
+                    } else {
+                        delete updatedErrors[field];
+                    }
+
+                    return updatedErrors;
+                });
+            }
+        };
 
     // Validate a field when the user leaves it
     const handleInputBlur = (field: FieldName) => {
@@ -118,7 +118,8 @@ const SignInPage = () => {
         });
     };
 
-    const handleOnSubmite = async (e: FormEvent<HTMLFormElement>) => {
+    // Email and password login
+    const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setHasSubmitted(true);
@@ -126,137 +127,70 @@ const SignInPage = () => {
         const validationErrors = validateForm(formValues);
         setErrors(validationErrors);
 
-        // Show field errors and toast if the form is invalid
         if (Object.keys(validationErrors).length > 0) {
-            toast.error("ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
-
+            toast.error("ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।");
             return;
         }
 
-        const { data, error } = await authClient.signIn.email({
-            email: formValues.email.trim(),
-            password: formValues.password,
-            rememberMe: true,
-            callbackURL: "/",
-        });
-
-        if (data) {
-            setUserExist(false);
-
-            toast.success('Successfully logged in!', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
+        try {
+            const { data, error } = await authClient.signIn.email({
+                email: formValues.email.trim(),
+                password: formValues.password,
+                rememberMe: true,
+                callbackURL: "/?notice=login-success",
             });
-        } else {
+
+            if (error) {
+                setUserExist(true);
+
+                toast.error("ইমেইল অথবা পাসওয়ার্ড সঠিক নয়। আবার চেষ্টা করুন।");
+                console.error("Login failed:", error);
+
+                return;
+            }
+
+            if (data) {
+                setUserExist(false);
+                // The global ToastProvider displays the success
+                // notification after redirecting to /?notice=login-success.
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
             setUserExist(true);
-
-            toast.success('Failed to login', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
+            toast.error("লগইন করা যায়নি। আবার চেষ্টা করুন।");
         }
     };
 
-    const handleGoogleLogin = async () => {
-        const { data, error } = await authClient.signIn.social({
-            provider: "google",
-        });
-
-        if (data) {
-            console.log("Login successfull!", data);
-
-            toast.success('Login successfull!', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
+    // Shared handler for Google and GitHub OAuth
+    const handleSocialLogin = async (
+        provider: "google" | "github"
+    ) => {
+        try {
+            const { error } = await authClient.signIn.social({
+                provider,
+                callbackURL: "/?notice=login-success",
+                newUserCallbackURL: "/?notice=social-signup-success",
+                errorCallbackURL: "/signin?notice=social-login-error",
             });
 
-            redirect("/");
-        } else {
-            console.log("Login failed", error);
+            if (error) {
+                console.error(`${provider} login failed:`, error);
 
-            toast.error('Login failed', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
+                toast.error(
+                    provider === "google"
+                        ? "Google দিয়ে লগইন করা যায়নি। আবার চেষ্টা করুন।"
+                        : "GitHub দিয়ে লগইন করা যায়নি। আবার চেষ্টা করুন।"
+                );
+            }
+        } catch (error) {
+            console.error(`${provider} login failed:`, error);
+            toast.error("লগইন করা যায়নি। আবার চেষ্টা করুন।");
         }
     };
 
-    const handleGithubLogin = async () => {
-        const { data, error } = await authClient.signIn.social({
-            provider: "github"
-        });
+    const handleGoogleLogin = () => handleSocialLogin("google");
 
-        if (data) {
-            console.log("Login successfull!", data);
-
-            toast.success('Login successfull!', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
-            });
-
-            redirect("/");
-        } else {
-            console.log("Login failed", error);
-
-            toast.error('Login failed', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
-        }
-    };
-
+    const handleGithubLogin = () => handleSocialLogin("github");
 
     return (
         <div className="container mx-auto flex w-full justify-center px-4 py-8 sm:px-5 sm:py-10">
@@ -285,7 +219,7 @@ const SignInPage = () => {
                         )}
                     </div>
 
-                    <form onSubmit={handleOnSubmite} noValidate className="w-full">
+                    <form onSubmit={handleOnSubmit} noValidate className="w-full">
                         <fieldset className="fieldset w-full">
 
                             <label className="label block w-full">
@@ -349,6 +283,7 @@ const SignInPage = () => {
 
                     <div className="flex w-full flex-col md:flex-row justify-center gap-2">
                         <button
+                            type="button"
                             onClick={handleGoogleLogin}
                             className="btn btn-outline w-full md:w-auto"
                         >
@@ -357,6 +292,7 @@ const SignInPage = () => {
                         </button>
 
                         <button
+                            type="button"
                             onClick={handleGithubLogin}
                             className="btn btn-outline w-full md:w-auto"
                         >

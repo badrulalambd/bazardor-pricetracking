@@ -1,13 +1,14 @@
+
 'use client'
 
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { FaGithub } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoIosWarning } from "react-icons/io";
-import { Bounce, toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 interface FormValues {
     name: string;
@@ -27,6 +28,8 @@ const initialValues: FormValues = {
 };
 
 const SignUpPage = () => {
+    const router = useRouter();
+
     const [userExist, setUserExist] = useState<boolean>(false);
     const [formValues, setFormValues] = useState<FormValues>(initialValues);
     const [errors, setErrors] = useState<FormErrors>({});
@@ -162,6 +165,7 @@ const SignUpPage = () => {
         });
     };
 
+    // Email signup
     const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -171,137 +175,64 @@ const SignUpPage = () => {
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length > 0) {
-            toast.error("ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "dark",
-                transition: Bounce,
-            });
+            toast.error("ফর্মের তথ্য ঠিক করে আবার চেষ্টা করুন।");
             return;
         }
 
-        const user = formValues;
+        try {
+            const user = formValues;
 
-        const { data, error } = await authClient.signUp.email({
-            name: user.name,
-            email: user.email,
-            password: user.password,
-        });
+            const { data, error } = await authClient.signUp.email({
+                name: user.name.trim(),
+                email: user.email.trim(),
+                password: user.password,
+            });
 
-        if (data) {
+            if (error || !data) {
+                setUserExist(true);
+                console.error("Signup failed", error);
+
+                toast.error("User already exists");
+                return;
+            }
+
             setUserExist(false);
-            console.log("Signup successfull!", data);
+            console.log("Signup successful!", data);
 
-            toast.success('Signup successfull!', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
-            });
-
-            redirect("/signin");
-        } else {
+            // The global ToastProvider shows the toast after navigation.
+            router.replace("/signin?notice=signup-success");
+        } catch (error) {
+            console.error("Signup failed", error);
             setUserExist(true);
-            console.log("Signup failed", error);
-
-            toast.error('User already exists', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
+            toast.error("অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।");
         }
     };
 
-    const handleGoogleLogin = async () => {
-        const { data, error } = await authClient.signIn.social({
-            provider: "google",
-        });
-
-        if (data) {
-            console.log("Login successfull!", data);
-
-            toast.success('Login successfull!', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
+    // Shared handler for Google and GitHub signup/login
+    const handleSocialLogin = async (
+        provider: "google" | "github"
+    ) => {
+        try {
+            const { error } = await authClient.signIn.social({
+                provider,
+                callbackURL: "/?notice=login-success",
+                newUserCallbackURL: "/?notice=social-signup-success",
+                errorCallbackURL: "/signup?notice=social-login-error",
             });
 
-            redirect("/");
-        } else {
-            console.log("Login failed", error);
-
-            toast.error('Login failed', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
+            if (error) {
+                console.error(`${provider} login failed`, error);
+                toast.error("Login failed");
+            }
+        } catch (error) {
+            console.error(`${provider} login failed`, error);
+            toast.error("Login failed");
         }
     };
 
-    const handleGithubLogin = async () => {
-        const { data, error } = await authClient.signIn.social({
-            provider: "github",
-        });
+    const handleGoogleLogin = () => handleSocialLogin("google");
 
-        if (data) {
-            console.log("Login successfull!", data);
-
-            toast.success('Login successfull!', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
-            });
-
-            redirect("/");
-        } else {
-            console.log("Login failed", error);
-
-            toast.error('Login failed', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
-        }
-    };
+    const handleGithubLogin = () => handleSocialLogin("github");
 
     return (
         <div className="container mx-auto flex w-full justify-center px-4 py-8 sm:px-5 sm:py-10">
@@ -311,6 +242,7 @@ const SignUpPage = () => {
                     <h2 className="text-2xl md:text-3xl font-bold text-center">
                         অ্যাকাউন্ট তৈরি করুন
                     </h2>
+
                     <span className="w-full text-center text-lg text-gray-500">
                         বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
                     </span>
@@ -322,6 +254,7 @@ const SignUpPage = () => {
                             userExist &&
                             <div className="w-full mb-3 flex gap-4 text-lg bg-red-700 text-gray-100 items-center rounded-2xl p-5">
                                 <IoIosWarning className="shrink-0 text-yellow-400 text-2xl" />
+
                                 <span className="min-w-0 break-words">
                                     এই ইমেইল দিয়ে আগে থেকেই একটি অ্যাকাউন্ট আছে। সাইন ইন করে নিন।
                                 </span>
@@ -433,6 +366,7 @@ const SignUpPage = () => {
 
                     <div className="flex w-full flex-col md:flex-row items-center justify-center gap-2.5">
                         <button
+                            type="button"
                             onClick={handleGoogleLogin}
                             className="btn btn-outline w-full md:w-auto"
                         >
@@ -440,6 +374,7 @@ const SignUpPage = () => {
                         </button>
 
                         <button
+                            type="button"
                             onClick={handleGithubLogin}
                             className="btn btn-outline w-full md:w-auto"
                         >
