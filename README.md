@@ -5,19 +5,25 @@
 বাজার দর (BazarDor) is a responsive web application that helps users explore daily prices of essential products across different markets in Bangladesh. Users can browse products by category, compare market prices, view minimum, maximum, and average prices, and track daily price changes through a clean and user-friendly Bengali interface.
 
 ## 3. 🛠️ Technologies Used
-- **Next.js 16**	Building the application UI and rendering pages
+- **Next.js 16:**	Building the application UI and rendering pages
 
-- **Next.js App Router**	Managing navigation, dynamic routes, layouts, and loading states
+- **Next.js App Router:**	Managing navigation, dynamic routes, layouts, and loading states
 
-- **Tailwind CSS**	Styling and responsive design
+- **Tailwind CSS:**	Styling and responsive design
 
-- **DaisyUI**	Reusable UI components and theme-based styling
+- **DaisyUI:**	Reusable UI components and theme-based styling
 
-- **TypeScript**	Type safety and maintainable code
+- **TypeScript:**	Type safety and maintainable code
 
-- **Better Auth**	User authentication and account management
+- **Better Auth:**	Handling user authentication, sign-up, sign-in, and account management
 
-- **React Toastify**	Success and error notifications
+ - **MongoDB:**	Storing user accounts and authentication-related data
+
+- **Google OAuth:**	Enabling social sign-in with Google
+
+- **GitHub OAuth:**	Enabling social sign-in with GitHub
+
+- **React Hot Toast**	Success and error notifications
 
 - **React Icons**	Icons throughout the application
 
