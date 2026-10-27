@@ -64,13 +64,18 @@ git clone https://github.com/badrulalambd/bazardor-pricetracking.git
 
 ### Step 2: Navigate to the Project Directory
 
+```
+
 cd bazardor-pricetracking
+```
 
 ### Step 3: Install Dependencies
 
 If the project uses npm:
 
+```
 npm install
+```
 
 ### Step 4: Configure Environment Variables
 
@@ -78,9 +83,11 @@ Create a .env.local file in the root directory of the project and add the enviro
 
 For example:
 
+```
 BETTER_AUTH_SECRET=your_secure_secret
 BETTER_AUTH_URL=http://localhost:3000
 BETTER_AUTH_DB_URL=your_mongodb_connection_string
+```
 
 Replace the example values with your actual configuration.
 
@@ -98,10 +105,14 @@ Never commit .env.local or expose your authentication secrets in a public reposi
 
 Run the following command:
 
+```
 npm run dev
+```
 
 ### Step 6: Open the Application
 
 Open your browser and visit:
 
+```
 http://localhost:3000
+```
