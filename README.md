@@ -57,9 +57,10 @@ A MongoDB database, either locally or through MongoDB Atlas
 ### Step 1: Clone the Repository
 
 Open your terminal and run:
-`
+
+```
 git clone https://github.com/badrulalambd/bazardor-pricetracking.git
-`
+```
 
 ### Step 2: Navigate to the Project Directory
 
