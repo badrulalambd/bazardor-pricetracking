@@ -1,4 +1,4 @@
-## 🛒 Project Title : বাজার দর (BazarDor)
+## 🛒 Project Title : বাজার দর (BazarDor) – Market Price Analysis Platform
 ### Daily Market Prices at a Glance
 
 ## 📝 Project Short Description
